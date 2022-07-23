@@ -107,11 +107,15 @@ def html_bs4():
     print(f'Successfuly!! jogo do {mandante} adicionado')
 
 for i in urls.keys(): # range => quantidade de dias q quer analisar
-    for url in urls[i]:
-        f.get(url)
-        wait(f)
-        html_bs4()
-    dataset = pd.DataFrame(jogos)
-    dataset.to_csv(f'./{i}.csv', sep=';', index = False, encoding = 'utf-8-sig')
+    try:
+        for url in urls[i]:
+            f.get(url)
+            wait(f)
+            html_bs4()
+    except:  
+        print('ERROR: processo de execução caindo no except - Verificar planilha e urls.json')
+    finally:
+        dataset = pd.DataFrame(jogos)
+        dataset.to_csv(f'./{i}.csv', sep=';', index = False, encoding = 'utf-8-sig')       
 print(jogos)
 f.quit()

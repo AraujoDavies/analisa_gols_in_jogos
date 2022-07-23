@@ -13,6 +13,8 @@ f = Firefox()
 f.get(academia)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 
+# lista de campeonatos que trabalho
+campeonatos = ['argentina', ]
 qt_analises_page = 1 # quantas vezes a lista de jogos foram att
 def prox_urls(): 
     """
