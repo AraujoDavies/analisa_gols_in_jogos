@@ -90,8 +90,10 @@ def gerar_json():
     print('JSON gerado!')
 
 # processoo de execução...
+x = input('quantos dias analisar considerando hoje: ')
+x = int(x)
 try:
-    for i in range(7): # vai analisar 7dias
+    for i in range(x): # vai analisar quantos dias o usuario quiser
         print(f'iniciando {i+1}')
         if i > 0:
             prox_urls()
@@ -100,5 +102,6 @@ try:
         soup()
     print(f'Qt de dias analisados: {qt_analises_page}')
     gerar_json()
+    f.quit()
 except:
     print('FATAL ERROR!!!!')
