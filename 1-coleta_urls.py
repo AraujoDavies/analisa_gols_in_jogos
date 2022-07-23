@@ -13,8 +13,7 @@ f = Firefox()
 f.get(academia)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 
-# lista de campeonatos que trabalho
-campeonatos = ['argentina', ]
+
 qt_analises_page = 1 # quantas vezes a lista de jogos foram att
 def prox_urls(): 
     """
@@ -59,6 +58,19 @@ def click_expansao():
 
 
 urls = {} # vai guardar as urls
+
+# lista de campeonatos que trabalho
+campeonatos = [
+    # Campeonatos AA
+    'argentina/superliga', 'alemanha/2-liga', 'austria/bundesliga', 
+    'brasil/brasileirao-serie-a', 'brasil/', 
+    'estados-unidos/major-league-soccer','suica/super-liga',
+    # submundo q eu gosto
+    'noruega/tippeligaen', 'belgica/1e-klasse', 
+    # talvez eu tire
+     'allsvenskan/mjallby', 'dinamarca/superligaen', 'mexico/liga-mx'
+ ]
+
 def soup():
     """
         cria objeto BS4;
@@ -74,11 +86,14 @@ def soup():
         soup = BeautifulSoup(table_games, 'html.parser') # criando soup
         date = soup.find('label').attrs['data-displaydate'] # data
         href = soup.find_all('td', class_='score') # todas partidas
-        print(f'DIA: {date} - Jogos adicionados: {len(href)}')
         urls[f'dia{qt_analises_page}'] = []
         # preciso pegar a referencia da data p
         for link in href:
-            urls[f'dia{qt_analises_page}'].append(link.find('a').attrs['href'])
+            link = link.find('a').attrs['href']
+            for c in campeonatos:
+                if c in link:
+                    urls[f'dia{qt_analises_page}'].append(link)
+        print(f'DIA: {date} - Jogos adicionados: {len(urls[f"dia{qt_analises_page}"])}')
     except:
         print('soup error')
 

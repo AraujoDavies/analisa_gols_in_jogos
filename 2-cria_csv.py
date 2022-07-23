@@ -32,7 +32,6 @@ def wait(f):
     except:
         print('wait nao confirmou click')
 
-qt_jogos = 0
 def html_bs4():
     """
         Cria o obj soup e passa p função de tratamento
@@ -106,16 +105,16 @@ def html_bs4():
     jogos.append(jogo)
     print(f'Successfuly!! jogo do {mandante} adicionado')
 
-for i in urls.keys(): # range => quantidade de dias q quer analisar
-    try:
+try:
+    for i in urls.keys(): # range => quantidade de dias q quer analisar
         for url in urls[i]:
             f.get(url)
             wait(f)
             html_bs4()
-    except:  
-        print('ERROR: processo de execução caindo no except - Verificar planilha e urls.json')
-    finally:
-        dataset = pd.DataFrame(jogos)
-        dataset.to_csv(f'./{i}.csv', sep=';', index = False, encoding = 'utf-8-sig')       
+except:  
+    print('ERROR: processo de execução caindo no except - Verificar planilha e urls.json')
+finally:
+    dataset = pd.DataFrame(jogos)
+    dataset.to_csv(f"{'./jogos_da_semana.csv' if len(urls.keys()) > 2 else './jogos_do_fim_de_semana.csv'}", sep=';', index = False, encoding = 'utf-8-sig')       
 print(jogos)
 f.quit()
