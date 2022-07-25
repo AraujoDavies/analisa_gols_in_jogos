@@ -62,13 +62,16 @@ urls = {} # vai guardar as urls
 # lista de campeonatos que trabalho
 campeonatos = [
     # Campeonatos AA
-    'argentina/superliga', 'alemanha/2-liga', 'austria/bundesliga', 
-    'brasil/brasileirao-serie-a', 'brasil/', 
-    'estados-unidos/major-league-soccer','suica/super-liga',
+    'argentina/superliga', 'alemanha/2-liga', 'alemanha/dfb-pokal' , 
+    'austria/bundesliga', 
+    'brasil/brasileirao-serie-a', 'brasil/serie-b', 'brasil/copa-do-brasil',
+    'estados-unidos/major-league-soccer', 'europa/liga-dos-campeoes-da-uefa',
+    'europa/europa-conference-league', 'inglaterra/championship', 'suica/super-liga', 
     # submundo q eu gosto
     'noruega/tippeligaen', 'belgica/1e-klasse', 
     # talvez eu tire
-     'allsvenskan/mjallby', 'dinamarca/superligaen', 'mexico/liga-mx'
+     'allsvenskan/mjallby', 'dinamarca/superligaen', 'mexico/liga-mx', 
+     'alemanha/super-cup', 'inglaterra/super-copa'
  ]
 
 def soup():
