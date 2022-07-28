@@ -1,20 +1,27 @@
 # Importa as opções do Firefox
 from selenium.webdriver.common.by import By
-from selenium.webdriver import Firefox
+from selenium import webdriver
 from time import sleep
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 import json
 
 # url da página inicial da academia das apostas
-academia = "https://www.academiadasapostasbrasil.com/"
+academia = "https://www.academiadasapostasbrasil.com"
 # abrindo o Navegador e Request
-f = Firefox()
+f = webdriver.Chrome()
 f.get(academia)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 
+def dia_inicial(numero_de_clicks): 
+    """
+    faz o click para selecionar em qual dia quero iniciar
+    """
+    next_btn = f.find_element(By.XPATH, '//div[@class= "widget-double-container-left mb-content"]//span[contains(@class, "date-increment")]')
+    for i in range(int(numero_de_clicks)):
+        next_btn.click()     
 
-qt_analises_page = 1 # quantas vezes a lista de jogos foram att
+qt_analises_page = 1 # variavel contador q ajuda o soup criar o dict (deve estar fora da def mesmo)
 def prox_urls(): 
     """
     Faz o click para listar os próximos jogos && tem um contador
@@ -55,7 +62,6 @@ def click_expansao():
         print('WARN: verificando se ainda tem btn_expandir para refazer o click')
         if wait_expansao():
             click_expansao()
-
 
 urls = {} # vai guardar as urls
 
@@ -110,7 +116,9 @@ def gerar_json():
     print('JSON gerado!')
 
 # processoo de execução...
-x = input('quantos dias analisar considerando hoje: ')
+d = input('qual dia começar, digite o valor numérico: \n 0 - hoje \n 1 - amanha \n 2 - dps de amanhã \n n - n dia \n\n digite: ')
+dia_inicial(d)
+x = input('quantos dias analisar (considerando o dia atual): ')
 x = int(x)
 try:
     for i in range(x): # vai analisar quantos dias o usuario quiser
