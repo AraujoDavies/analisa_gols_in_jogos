@@ -1,6 +1,6 @@
 # Importa as opções do Firefox
 from selenium.webdriver.common.by import By
-from selenium.webdriver import Firefox
+from selenium.webdriver import Chrome
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,7 +8,7 @@ import json
 from time import sleep 
 
 # abrindo o Navegador e Request
-f = Firefox()
+f = Chrome()
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 jogos = []
 
