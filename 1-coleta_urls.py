@@ -67,17 +67,27 @@ urls = {} # vai guardar as urls
 
 # lista de campeonatos que trabalho
 campeonatos = [
-    # Campeonatos AA
-    'argentina/superliga', 'alemanha/2-liga', 'alemanha/dfb-pokal' , 
-    'austria/bundesliga', 
-    'brasil/brasileirao-serie-a', 'brasil/serie-b', 'brasil/copa-do-brasil',
-    'estados-unidos/major-league-soccer', 'europa/liga-dos-campeoes-da-uefa',
-    'europa/europa-conference-league', 'inglaterra/championship', 'suica/super-liga', 
+    # Continentais
+    'america-do-sul/copa-libertadores-da-america', 'america-do-sul/copa-bridgestone-sul-americana',
+    'europa/liga-dos-campeoes-da-uefa', 'europa/europa-conference-league', 'europa/liga-europa', 
+    
+    # Ligas
+    'argentina/superliga', 'alemanha/bundesliga', 'alemanha/2-liga',
+    'brasil/brasileirao-serie-a', 'brasil/serie-b', 
+    'estados-unidos/major-league-soccer', 'franca/ligue-1', 'holanda/eredivisie', 'inglaterra/premier-league', 
+    'inglaterra/championship', 'portugal/primeira-liga', 'suica/super-liga', 'turquia/super-liga-turca',
+    
+    # copas
+    'alemanha/dfb-pokal', 'alemanha/super-cup', 'argentina/copa-argentina',
+     'brasil/copa-do-brasil', 'inglaterra/super-copa', 'italia/coppa-italia',
+    
     # submundo q eu gosto
-    'noruega/tippeligaen', 'belgica/1e-klasse', 
+    'austria/bundesliga', 'belgica/1e-klasse', 'noruega/tippeligaen',
+
     # talvez eu tire
-     'allsvenskan/mjallby', 'dinamarca/superligaen', 'mexico/liga-mx', 
-     'alemanha/super-cup', 'inglaterra/super-copa'
+     'allsvenskan/mjallby', 'mexico/liga-mx', 'japao/j-league'
+    # 'dinamarca/superligaen',
+    
  ]
 
 def soup():
