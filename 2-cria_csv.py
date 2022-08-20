@@ -1,14 +1,17 @@
 # Importa as opções do Firefox
 from selenium.webdriver.common.by import By
-from selenium.webdriver import Chrome
+from selenium import webdriver
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 import json
 from time import sleep 
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 # abrindo o Navegador e Request
-f = Chrome()
+service = ChromeService(executable_path=ChromeDriverManager().install())
+f = webdriver.Chrome(service=service)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 jogos = []
 

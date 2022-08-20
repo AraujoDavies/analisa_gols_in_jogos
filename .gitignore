@@ -2,3 +2,4 @@
 venv/
 *.csv
 geckodriver.log
+.~lock.jogos_do_fim_de_semana.csv#
