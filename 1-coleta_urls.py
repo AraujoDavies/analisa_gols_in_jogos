@@ -5,6 +5,13 @@ from time import sleep
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 import json
+# utilizando webdriver no linux
+"""
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+service = ChromeService(executable_path=ChromeDriverManager().install())
+f = webdriver.Chrome(service=service)
+"""
 
 # url da página inicial da academia das apostas
 academia = "https://www.academiadasapostasbrasil.com"
@@ -73,7 +80,7 @@ campeonatos = [
     
     # Ligas
     'argentina/superliga', 'alemanha/bundesliga', 'alemanha/2-liga',
-    'brasil/brasileirao-serie-a', 'brasil/serie-b', 
+    'brasil/brasileirao-serie-a', 'brasil/serie-b', 'espanha/la-liga', 'italia/serie-a-tim'
     'estados-unidos/major-league-soccer', 'franca/ligue-1', 'holanda/eredivisie', 'inglaterra/premier-league', 
     'inglaterra/championship', 'portugal/primeira-liga', 'suica/super-liga', 'turquia/super-liga-turca',
     

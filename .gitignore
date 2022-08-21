@@ -2,4 +2,8 @@
 venv/
 *.csv
 geckodriver.log
+<<<<<<< HEAD
 melhorias.md
+=======
+.~lock.jogos_do_fim_de_semana.csv#
+>>>>>>> f5a7afc98f7e8e716db60a87ea187e70f286d93d
