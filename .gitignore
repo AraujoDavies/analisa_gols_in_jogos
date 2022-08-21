@@ -2,3 +2,4 @@
 venv/
 *.csv
 geckodriver.log
+melhorias.md
