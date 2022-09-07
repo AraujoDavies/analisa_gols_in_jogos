@@ -74,28 +74,25 @@ urls = {} # vai guardar as urls
 
 # lista de campeonatos que trabalho
 campeonatos = [
-    # Continentais
-    'america-do-sul/copa-libertadores-da-america', 'america-do-sul/copa-bridgestone-sul-americana',
-    'europa/liga-dos-campeoes-da-uefa', 'europa/europa-conference-league', 'europa/liga-europa', 
-    
-    # Ligas
-    'argentina/superliga', 'alemanha/bundesliga', 'alemanha/2-liga',
-    'brasil/brasileirao-serie-a', 'brasil/serie-b', 'espanha/la-liga', 'italia/serie-a-tim'
-    'estados-unidos/major-league-soccer', 'franca/ligue-1', 'holanda/eredivisie', 'inglaterra/premier-league', 
-    'inglaterra/championship', 'portugal/primeira-liga', 'suica/super-liga', 'turquia/super-liga-turca',
-    
-    # copas
-    'alemanha/dfb-pokal', 'alemanha/super-cup', 'argentina/copa-argentina',
-     'brasil/copa-do-brasil', 'inglaterra/super-copa', 'italia/coppa-italia',
-    
+        'alemanha/bundesliga', 'alemanha/2-liga', 'dfb-pokal', 'alemanha/super-cup',
+        'brasileirao-serie-a', 'copa-do-brasil', 
+        'la-liga', 'liga-adelante', 
+        'serie-a-tim', 'coppa-italia',
+        'inglaterra/super-copa', 
+        'franca/ligue-1', 
+        'eredivisie', 
+        'primeira-liga', 
+        'suica/super-liga', # suiça
+        'tippeligaen',
+        'major-league-soccer',
+        'super-liga-turca'
+        # Continentais
+        'copa-libertadores-da-america', 'copa-bridgestone-sul-americana',
+        'liga-dos-campeoes-da-uefa', 'europa-conference-league', 'liga-europa'
     # submundo q eu gosto
-    'austria/bundesliga', 'belgica/1e-klasse', 'noruega/tippeligaen',
-
-    # talvez eu tire
-     'allsvenskan/mjallby', 'mexico/liga-mx', 'japao/j-league'
-    # 'dinamarca/superligaen',
-    
- ]
+        # 'argentina/superliga', 'austria/bundesliga', 
+        #  'belgica/1e-klasse'
+]
 
 def soup():
     """
