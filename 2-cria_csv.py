@@ -6,14 +6,12 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 import json
 from time import sleep 
-"""
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-service = ChromeService(executable_path=ChromeDriverManager().install())
-f = webdriver.Chrome(service=service)
-"""
+
 # abrindo o Navegador e Request
-f = webdriver.Chrome()
+service = Service(executable_path=ChromeDriverManager().install())
+f = webdriver.Chrome(service=service)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 jogos = []
 
@@ -120,6 +118,6 @@ except:
     print('ERROR: processo de execução caindo no except - Verificar planilha e urls.json')
 finally:
     dataset = pd.DataFrame(jogos)
-    dataset.to_csv(f"{'./jogos_da_semana.csv' if len(urls.keys()) > 2 else './jogos_do_fim_de_semana.csv'}", sep=';', index = False, encoding = 'utf-8-sig')       
+    dataset.to_csv(f"{'./jogos_da_semana.csv' if len(urls.keys()) > 2 else './jogos_do_fim_de_semana.csv'}", sep=',', index = False, encoding = 'utf-8-sig')       
 print(jogos)
 f.quit()

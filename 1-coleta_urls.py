@@ -5,6 +5,9 @@ from time import sleep
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 import json
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 # utilizando webdriver no linux
 """
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -16,7 +19,8 @@ f = webdriver.Chrome(service=service)
 # url da página inicial da academia das apostas
 academia = "https://www.academiadasapostasbrasil.com"
 # abrindo o Navegador e Request
-f = webdriver.Chrome()
+service = Service(executable_path=ChromeDriverManager().install())
+f = webdriver.Chrome(service=service)
 f.get(academia)
 wdw = WebDriverWait(f, 30, poll_frequency=1)
 
@@ -55,11 +59,10 @@ def wait_expansao():
     
 def click_expansao(): 
     """
-     função q responsável pela expansão de todos os jogos
+     função responsável pela expansão de todos os jogos
     """
     try:
         sleep(1)
-        #while wait_expansao():
         if wait_expansao():
             btn_exp = f.find_element(By.XPATH, '//td[contains(@class, "footer")]')
             btn_exp.click()
@@ -74,24 +77,25 @@ urls = {} # vai guardar as urls
 
 # lista de campeonatos que trabalho
 campeonatos = [
+        # Ligas
         'alemanha/bundesliga', 'alemanha/2-liga', 'dfb-pokal', 'alemanha/super-cup',
-        'brasileirao-serie-a', 'copa-do-brasil', 
+        'brasileirao-serie-a', 'copa-do-brasil/', 'brasil/serie-b', 
         'la-liga', 'liga-adelante', 
         'serie-a-tim', 'coppa-italia',
-        'inglaterra/super-copa', 
+        'inglaterra/super-copa', 'inglaterra/premier-league', 
         'franca/ligue-1', 
-        'eredivisie', 
+        '/eredivisie', 'eerste-divisie',
         'primeira-liga', 
         'suica/super-liga', # suiça
         'tippeligaen',
         'major-league-soccer',
-        'super-liga-turca'
+        'super-liga-turca',
         # Continentais
         'copa-libertadores-da-america', 'copa-bridgestone-sul-americana',
-        'liga-dos-campeoes-da-uefa', 'europa-conference-league', 'liga-europa'
+        'liga-dos-campeoes-da-uefa', 'europa-conference-league', 'liga-europa',
     # submundo q eu gosto
-        # 'argentina/superliga', 'austria/bundesliga', 
-        #  'belgica/1e-klasse'
+        'superliga-argentina', 'copa-argentina', # 'austria/bundesliga', 
+        'belgica/1e-klasse'
 ]
 
 def soup():
