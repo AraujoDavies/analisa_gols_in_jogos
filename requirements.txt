@@ -1,0 +1,10 @@
+pytest
+blue
+isort
+mkdocs
+prospector
+pip-audit
+webdriver_manager
+selenium
+bs4
+mysql-connector-python
