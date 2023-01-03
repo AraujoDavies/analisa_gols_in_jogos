@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "bot-analisajogos"
+version = "0.1.0"
+description = ""
+authors = ["Davies <daviesaraujo@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "codigo"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+bs4 = "^0.0.1"
+mysql-connector-python = "^8.0.31"
+selenium = "^4.7.2"
+google-api-python-client = "^2.70.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^0.8.0"
+protobuf = "3.18.3"
+
+[tool.poetry.scripts]
+my-script = "codigo.main:main"
+
+[tool.poetry.group.dev.dependencies]
+webdriver-manager = "^3.8.5"
+pip-audit = "^2.4.12"
+mkdocs = "^1.4.2"
+isort = "^5.11.4"
+pytest = "^7.2.0"
+ipykernel = "^6.19.4"
+prospector = "1.7.7"
+blue = "^0.9.1"
+wrapt = "^1.14.1"
+dill = "^0.3.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

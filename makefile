@@ -2,15 +2,16 @@
 .PHONY: install format lint test sec
 
 install:
-	@python -m pip install --upgrade pip
-	@pip install -r requirements.txt
+	@poetry install
 format:
 	@blue .
 	@isort .
 lint:
 	@blue . --check
 	@isort . --check
+pep:
 	@prospector
+	@prospector --with-tool pep257
 test:
 	@pytest -v
 sec:

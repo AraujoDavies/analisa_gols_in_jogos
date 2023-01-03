@@ -1,6 +1,7 @@
 *.json
 venv/
 *.csv
+poetry.lock
 geckodriver.log
 melhorias.md
 gsheet/
