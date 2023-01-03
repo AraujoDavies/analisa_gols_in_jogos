@@ -1,43 +1,45 @@
-import mysql.connector # pip install mysql-connector-python
-from dotenv import load_dotenv
-from os import getenv
 import logging
+from os import getenv
+
+import mysql.connector  # pip install mysql-connector-python
+from dotenv import load_dotenv
 
 load_dotenv()
 
-class Database():
+
+class Database:
     def __init__(self):
         self.conexao = mysql.connector.connect(
-            host = getenv('HOST_DATABASE'),
-            user = getenv('USER_DATABASE'),
-            password = getenv('PASSWORD_DATABASE'), 
-            database = getenv('TABLE_DATABASE')
+            host=getenv('HOST_DATABASE'),
+            user=getenv('USER_DATABASE'),
+            password=getenv('PASSWORD_DATABASE'),
+            database=getenv('TABLE_DATABASE'),
         )
         self.cursor = self.conexao.cursor()
-        logging.warning('DATABASE: Conexão aberta')
-    
+        logging.info('DATABASE: Conexão aberta')
+
     def select(self, comando):
-        """ Data consult."""
+        """Data consult."""
         select = []
         try:
             self.cursor.execute(comando)
-            select = self.cursor.fetchall() # ex de resultado: [(1.29, 30)]
+            select = self.cursor.fetchall()   # ex de resultado: [(1.29, 30)]
         except:
-            logging.warning('DATABASE: Select Fail')
+            logging.error('DATABASE: Select Fail')
         finally:
             self.cursor.close()
             self.conexao.close
-            logging.warning('DATABASE: Conexão fechada')
+            logging.info('DATABASE: Conexão fechada')
         return select
-    
+
     def manipulation(self, comando):
-        """ Param "comando" can be Insert, update and delete. """
+        """Param "comando" can be Insert, update and delete."""
         try:
             self.cursor.execute(comando)
             self.conexao.commit()
         except:
-            logging.warning('DATABASE: DML Fail')
+            logging.error(f'DATABASE: DML Fail {comando}')
         finally:
             self.cursor.close()
             self.conexao.close
-            logging.warning('DATABASE: Conexão fechada')
+            logging.info('DATABASE: Conexão fechada')

@@ -1,48 +1,73 @@
+import logging
+from datetime import datetime
+from time import sleep
+
 from academia import AcademiaDasApostas
 from database import Database
+from gdrive import delete_values, update_values
 from helpers import convert_data_in_datetime
-from time import sleep
-import logging
 
-logging.basicConfig(level=logging.WARNING, filename="codigo.log", encoding='utf-8', format="%(asctime)s - %(levelname)s: %(message)s")
+logging.basicConfig(
+    level=logging.WARNING,
+    filename='analise_gols.log',
+    encoding='utf-8',
+    format='%(asctime)s - %(levelname)s: %(message)s',
+)
 
 if __name__ == '__main__':
     logging.warning('Iniciando rotina...')
-    # coletando informações no site da academia das apostas, jogos X dias (3 por default)
-    academia = AcademiaDasApostas()
+    # coletando informações no site da academia das apostas, jogos X dias
+    academia = AcademiaDasApostas(remote=True)
     info_iniciais = []
-    dias = 5
+    dias = 4
     for dia in range(dias):
         academia.expand_all_matches()
         info_iniciais += academia.coletando_url_e_informacoes_iniciais()
         # se for o ultimo dia nao precisa clicar para a próx página
-        if dia != dias -1: 
+        if dia != dias - 1:
             academia.click_to_go_next_day_matches()
-        logging.warning(f'Urls do dia {dia + 1/dias} coletadas')
+        logging.warning(f'Urls do dia {dia + 1}/{dias} coletadas')
 
     logging.warning('Inserindo urls coletadas no Database.')
     # salvando informações inicias no banco de dados
     for info_item in info_iniciais:
-        data = convert_data_in_datetime(info_item['data'], info_item['horario_do_jogo'])
+        data = convert_data_in_datetime(
+            info_item['data'], info_item['horario_do_jogo']
+        )
         campeonato = info_item['campeonato']
         time_home = info_item['time_mandante']
         time_away = info_item['time_visitante']
         url = info_item['url']
         comando = f"SELECT url FROM academia_apostas.analise_gols WHERE url = '{url}';"
         url_check = Database().select(comando)
-        if bool(url_check): # se a url já existe no banco pule para o próximo
+        if bool(url_check):   # se a url já existe no banco pule para o próximo
             logging.info(f'Url: {url} já está no Database')
             continue
-        comando = f"INSERT INTO `academia_apostas`.`analise_gols` (data, campeonato, time_home, time_away, url) VALUES ('{data}', '{campeonato}', '{time_home}', '{time_away}', '{url}');"
+        comando = f"""INSERT INTO `academia_apostas`.`analise_gols` (data, campeonato, time_home, time_away, url) 
+VALUES ("{data}", "{campeonato}", "{time_home}", "{time_away}", "{url}");"""
         Database().manipulation(comando)
 
+    logging.warning('Verificando jogos com datas antigas...')
+    # remover eventos que ja iniciaram
+    comando = 'SELECT data, url FROM academia_apostas.analise_gols;'
+    datas_urls = Database().select(comando)
+    data_atual = datetime.today()
+
+    for dado in datas_urls:
+        data = dado[0]
+        url = dado[1]
+        if data < data_atual:
+            comando = f"DELETE FROM `academia_apostas`.`analise_gols` WHERE (`url` = '{url}');"
+            Database().manipulation(comando)
+
     logging.warning('Começando análise individuais de gols...')
+
     # pegar informações complementares (quantos gols/tempo)
-    comando = f"SELECT url, HT FROM academia_apostas.analise_gols;"
+    comando = 'SELECT url, HT FROM academia_apostas.analise_gols;'
     urls = Database().select(comando)
     for url in urls:
         # se info complementares(qt de gols) for NULL ai pode fazer a analise
-        info_complementares_is_none = url[1] == None
+        info_complementares_is_none = url[1] is None
         if info_complementares_is_none:
             try:
                 dados_dos_gols = academia.coletar_info_de_gols(url[0])
@@ -66,8 +91,55 @@ UPDATE `academia_apostas`.`analise_gols` SET `HT` = '{dados_dos_gols['ht']}', `F
 WHERE (`url` = '{url[0]}');"""
 
                 Database().manipulation(comando)
-                sleep(20) # acrescentar um jogo a cada 20 segundo pra não forçar o servidor
+                sleep(
+                    10
+                )   # acrescentar um jogo a cada X segundos pra não forçar o servidor
             except:
                 logging.error(f'Falha na análise individual da url: {url[0]}')
                 continue
+
+    # acrescentar itens no google sheet
+
+    try:
+        comando = 'SELECT * FROM academia_apostas.analise_gols;'
+        dados = Database().select(comando)
+
+        planilha = []
+        for dado in dados:
+            data = dado[1]
+            campeonato = dado[2]
+            mandante = dado[3]
+            visitante = dado[4]
+            url = dado[5]
+            ht = dado[6]
+            ft = dado[7]
+            zero15 = dado[8]
+            quinze30 = dado[9]
+            trinta45 = dado[10]
+            quarentacinco60 = dado[11]
+            sessenta75 = dado[12]
+            setentacinco90 = dado[13]
+
+            row = [
+                str(data),
+                campeonato,
+                mandante,
+                visitante,
+                ht,
+                ft,
+                zero15,
+                quinze30,
+                trinta45,
+                quarentacinco60,
+                sessenta75,
+                setentacinco90,
+            ]
+            planilha.append(row)
+
+        delete_values()   # primeiro limpa a planilha
+        update_values(planilha)   # depois insere
+        logging.warning('Valores do banco de dados inseridos no gsheet')
+    except:
+        logging.error('Falha ao inserir dados do DB no Gsheet')
+
     logging.warning('Finalizando rotina. até amanhã <3')
