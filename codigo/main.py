@@ -72,11 +72,12 @@ VALUES ("{data}", "{campeonato}", "{time_home}", "{time_away}", "{url}");"""
             comando = f"DELETE FROM `academia_apostas`.`analise_gols` WHERE (`url` = '{url}');"
             Database().manipulation(comando)
 
-    logging.warning('Começando análise individuais de gols...')
-
     # pegar informações complementares (quantos gols/tempo)
     comando = 'SELECT url, HT FROM academia_apostas.analise_gols;'
     urls = Database().select(comando)
+    
+    logging.warning(f'Começando análise individuais de gols... ({len(urls)} jogos serão analisados).')
+    
     for url in urls:
         # se info complementares(qt de gols) for NULL ai pode fazer a analise
         info_complementares_is_none = url[1] is None
