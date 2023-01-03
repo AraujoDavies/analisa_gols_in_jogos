@@ -17,7 +17,7 @@ google-auth-oauthlib = "^0.8.0"
 protobuf = "3.18.3"
 
 [tool.poetry.scripts]
-my-script = "codigo.main:main"
+analise_gols = "codigo.main"
 
 [tool.poetry.group.dev.dependencies]
 webdriver-manager = "^3.8.5"
@@ -30,6 +30,7 @@ prospector = "1.7.7"
 blue = "^0.9.1"
 wrapt = "^1.14.1"
 dill = "^0.3.6"
+pandas = "^1.5.2"
 
 [build-system]
 requires = ["poetry-core"]

@@ -7,6 +7,7 @@ from database import Database
 from gdrive import delete_values, update_values
 from helpers import convert_data_in_datetime
 
+import json
 logging.basicConfig(
     level=logging.WARNING,
     filename='analise_gols.log',
@@ -14,12 +15,15 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 
+with open('campeonatos_nao_analisados.json', mode='r', encoding='utf-8') as campeonatos:
+    ligas_nao_analisadas = json.load(campeonatos)
+
 if __name__ == '__main__':
     logging.warning('Iniciando rotina...')
     # coletando informações no site da academia das apostas, jogos X dias
     academia = AcademiaDasApostas(remote=True)
     info_iniciais = []
-    dias = 4
+    dias = 7
     for dia in range(dias):
         academia.expand_all_matches()
         info_iniciais += academia.coletando_url_e_informacoes_iniciais()
@@ -29,12 +33,20 @@ if __name__ == '__main__':
         logging.warning(f'Urls do dia {dia + 1}/{dias} coletadas')
 
     logging.warning('Inserindo urls coletadas no Database.')
+    
+    campeonatos_nao_analisados_exibidos_no_log = []
     # salvando informações inicias no banco de dados
     for info_item in info_iniciais:
         data = convert_data_in_datetime(
             info_item['data'], info_item['horario_do_jogo']
         )
         campeonato = info_item['campeonato']
+        # filtrando campeonatos que serão incluidos no banco de dados para análise
+        if campeonato in ligas_nao_analisadas:
+            if campeonato not in campeonatos_nao_analisados_exibidos_no_log:
+                campeonatos_nao_analisados_exibidos_no_log.append(campeonato)
+                logging.warning(f'Campeonato: {campeonato} não será análisado!')
+            continue
         time_home = info_item['time_mandante']
         time_away = info_item['time_visitante']
         url = info_item['url']

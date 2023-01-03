@@ -16,3 +16,5 @@ test:
 	@pytest -v
 sec:
 	@pip-audit
+run:
+	@poetry run python codigo/main.py
