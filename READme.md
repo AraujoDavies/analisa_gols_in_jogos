@@ -1,12 +1,15 @@
 # .env 
-# é necessário um arquivo .env paras as Variaveis de ambiente de conexão com o DB
+## é necessário um arquivo .env paras as Variaveis de ambiente de conexão com o DB
 
-HOST_DATABASE = ''
-USER_DATABASE = ''
-PASSWORD_DATABASE = ''
-TABLE_DATABASE = ''
+    HOST_DATABASE = ''
+    USER_DATABASE = ''
+    PASSWORD_DATABASE = ''
+    TABLE_DATABASE = ''
 
-# gsheet/
+# gsheet:
 
-para integrar com gshet é obrigatório que tenha os arquivos credentials.json e token.json. Para saber mais, acesse:
-https://developers.google.com/sheets/api/quickstart/python
+## para integrar com gshet é obrigatório que tenha os arquivos credentials.json e token.json. Para saber mais, acesse: https://developers.google.com/sheets/api/quickstart/python
+
+# Rotina de execução:
+
+![fluxograma](./rotina_de_execucao.png)

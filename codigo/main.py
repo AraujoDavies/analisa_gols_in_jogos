@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     logging.warning('Inserindo urls coletadas no Database.')
     
-    campeonatos_nao_analisados_exibidos_no_log = []
+    campeonatos_nao_analisados_exibidos_no_log = [] # variavel de controle. Vai exibir apenas uma vez no log o campeonato não desejado
     # salvando informações inicias no banco de dados
     for info_item in info_iniciais:
         data = convert_data_in_datetime(
