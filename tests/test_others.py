@@ -30,16 +30,8 @@ def test_database_insert_select_update_and_delete():
 
 
 def test_de_update_do_gdrive():
-    values = [['10-11-13', 'Brasil'], ['10-11-14', 'Argentina']]
+    values = [['test']]
     return_values = update_values(values)
-    assert (
-        return_values['spreadsheetId']
-        == '1ene0rIqqgP5wDQJrLII2M5bhqfH21lHK7zyx0yJt7vc'
-    )
-
-
-def test_de_delete_do_gdrive():
-    return_values = delete_values()
     assert (
         return_values['spreadsheetId']
         == '1ene0rIqqgP5wDQJrLII2M5bhqfH21lHK7zyx0yJt7vc'

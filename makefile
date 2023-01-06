@@ -17,4 +17,4 @@ test:
 sec:
 	@pip-audit
 run:
-	@poetry run python codigo/main.py
+	@poetry run python -i codigo/main.py

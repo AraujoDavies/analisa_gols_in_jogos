@@ -36,7 +36,11 @@ class AcademiaDasApostas:
         partidas_escondidas = self.driver.find_elements(
             'xpath', '//td[contains(@class, "footer")]'
         )
+        tentativas = 0
         while bool(partidas_escondidas):
+            tentativas += 1
+            if tentativas > 10:
+                break
             try:
                 partidas_escondidas[0].click()
             except:
@@ -46,7 +50,8 @@ class AcademiaDasApostas:
             partidas_escondidas = self.driver.find_elements(
                 'xpath', '//td[contains(@class, "footer")]'
             )
-        logging.warning('expand_all_matches: Expansão finalizada com sucesso!')
+        if bool(partidas_escondidas) is False:
+            logging.warning('expand_all_matches: Expansão finalizada com sucesso!')
 
     def coletando_url_e_informacoes_iniciais(self):
         """Coleta e retorna os dados iniciais dos confrontos."""
