@@ -1,3 +1,4 @@
+import json
 import logging
 from datetime import datetime
 from time import sleep
@@ -7,7 +8,6 @@ from database import Database
 from gdrive import delete_values, update_values
 from helpers import convert_data_in_datetime
 
-import json
 logging.basicConfig(
     level=logging.WARNING,
     filename='analise_gols.log',
@@ -15,7 +15,9 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 
-with open('campeonatos_nao_analisados.json', mode='r', encoding='utf-8') as campeonatos:
+with open(
+    'codigo/campeonatos_nao_analisados.json', mode='r', encoding='utf-8'
+) as campeonatos:
     ligas_nao_analisadas = json.load(campeonatos)
 
 if __name__ == '__main__':
@@ -23,7 +25,7 @@ if __name__ == '__main__':
     # coletando informações no site da academia das apostas, jogos X dias
     academia = AcademiaDasApostas(remote=True)
     info_iniciais = []
-    dias = 7
+    dias = 2 # analisa 2 dias apenas para a planilha não ficar mto pesada
     for dia in range(dias):
         academia.expand_all_matches()
         info_iniciais += academia.coletando_url_e_informacoes_iniciais()
@@ -33,8 +35,10 @@ if __name__ == '__main__':
         logging.warning(f'Urls do dia {dia + 1}/{dias} coletadas')
 
     logging.warning('Inserindo urls coletadas no Database.')
-    
-    campeonatos_nao_analisados_exibidos_no_log = [] # variavel de controle. Vai exibir apenas uma vez no log o campeonato não desejado
+
+    campeonatos_nao_analisados_exibidos_no_log = (
+        []
+    )   # variavel de controle. Vai exibir apenas uma vez no log o campeonato não desejado
     # salvando informações inicias no banco de dados
     for info_item in info_iniciais:
         data = convert_data_in_datetime(
@@ -45,7 +49,9 @@ if __name__ == '__main__':
         if campeonato in ligas_nao_analisadas:
             if campeonato not in campeonatos_nao_analisados_exibidos_no_log:
                 campeonatos_nao_analisados_exibidos_no_log.append(campeonato)
-                logging.warning(f'Campeonato: {campeonato} não será análisado!')
+                logging.warning(
+                    f'Campeonato: {campeonato} não será análisado!'
+                )
             continue
         time_home = info_item['time_mandante']
         time_away = info_item['time_visitante']
@@ -68,16 +74,20 @@ VALUES ("{data}", "{campeonato}", "{time_home}", "{time_away}", "{url}");"""
     for dado in datas_urls:
         data = dado[0]
         url = dado[1]
-        if data < data_atual:
+        if data < data_atual and data.day != data_atual.day: # deletar jogos do dia anterior pra trás
             comando = f"DELETE FROM `academia_apostas`.`analise_gols` WHERE (`url` = '{url}');"
             Database().manipulation(comando)
 
     # pegar informações complementares (quantos gols/tempo)
     comando = 'SELECT url, HT FROM academia_apostas.analise_gols;'
     urls = Database().select(comando)
-    
-    logging.warning(f'Começando análise individuais de gols... ({len(urls)} jogos serão analisados).')
-    
+
+    logging.warning(
+        f'Começando análise individuais de gols... ({len(urls)} jogos no DB).'
+    )
+
+    contador_de_jogos_analisados = 0
+    contador_de_jogos_analisados_com_erro = 0
     for url in urls:
         # se info complementares(qt de gols) for NULL ai pode fazer a analise
         info_complementares_is_none = url[1] is None
@@ -107,11 +117,25 @@ WHERE (`url` = '{url[0]}');"""
                 sleep(
                     10
                 )   # acrescentar um jogo a cada X segundos pra não forçar o servidor
+                contador_de_jogos_analisados += 1
             except:
                 logging.error(f'Falha na análise individual da url: {url[0]}')
+                contador_de_jogos_analisados_com_erro += 1
                 continue
 
+    logging.warning(
+        f"""Análise individual de gols finalizada... ({contador_de_jogos_analisados} scrapy relizados.
+        Erros = {contador_de_jogos_analisados_com_erro})."""
+    )
+
     # acrescentar itens no google sheet
+    # vericar token antes
+    try:
+        update_values([['test_before_insere']])
+        logging.warning('Token está funcionando.')
+    except:
+        logging.error('Aguardando revalidação do Token do google')
+        input('Aguardando revalidação do Token do google (qqr tecla to continue)')
 
     try:
         comando = 'SELECT * FROM academia_apostas.analise_gols;'
