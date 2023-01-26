@@ -15,6 +15,12 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 
+def escrever_json(lista):
+    with open(
+        'planilha.json', 'w', encoding='utf-8'
+    ) as f:
+        json.dump(lista, f, ensure_ascii=False)
+
 with open(
     'codigo/campeonatos_nao_analisados.json', mode='r', encoding='utf-8'
 ) as campeonatos:
@@ -25,7 +31,7 @@ if __name__ == '__main__':
     # coletando informações no site da academia das apostas, jogos X dias
     academia = AcademiaDasApostas(remote=True)
     info_iniciais = []
-    dias = 2 # analisa 2 dias apenas para a planilha não ficar mto pesada
+    dias = 1 # analisa x dia(s) apenas para a planilha não ficar mto pesada
     for dia in range(dias):
         academia.expand_all_matches()
         info_iniciais += academia.coletando_url_e_informacoes_iniciais()
@@ -135,7 +141,8 @@ WHERE (`url` = '{url[0]}');"""
         logging.warning('Token está funcionando.')
     except:
         logging.error('Aguardando revalidação do Token do google')
-        input('Aguardando revalidação do Token do google (qqr tecla to continue)')
+        input("""Aguardando revalidação do Token do google, caso não seja
+        revalidado será criado um json com os dados. (qqr tecla to continue)""")
 
     try:
         comando = 'SELECT * FROM academia_apostas.analise_gols;'
@@ -173,9 +180,13 @@ WHERE (`url` = '{url[0]}');"""
             ]
             planilha.append(row)
 
-        delete_values()   # primeiro limpa a planilha
-        update_values(planilha)   # depois insere
-        logging.warning('Valores do banco de dados inseridos no gsheet')
+        try:
+            delete_values()   # primeiro limpa a planilha
+            update_values(planilha)   # depois insere
+            logging.warning('Valores do banco de dados inseridos no gsheet')
+        except:
+            escrever_json(planilha)
+            logging.warning('Não deu pra salvar no gshet... criando json')
     except:
         logging.error('Falha ao inserir dados do DB no Gsheet')
 

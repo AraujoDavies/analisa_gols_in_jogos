@@ -8,6 +8,8 @@
 
 # gsheet:
 
+## Caso não seja integrado criará um arquivo.json
+
 ## para integrar com gshet é obrigatório que tenha os arquivos credentials.json e token.json. Para saber mais, acesse: https://developers.google.com/sheets/api/quickstart/python
 
 # Rotina de execução:
