@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bot-analisajogos"
+name = "analisajogos"
 version = "0.1.0"
 description = ""
 authors = ["Davies <daviesaraujo@hotmail.com>"]
